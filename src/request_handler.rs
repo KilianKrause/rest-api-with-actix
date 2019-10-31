@@ -9,7 +9,7 @@ pub fn get_all() -> Result<HttpResponse, Error> {
     let micheal = Person::new(1, "Micheal".to_owned(), 32);
     let frank = Person::new(2, "Frank".to_owned(), 28);
     let persons = vec![micheal, frank];
-    if all_correct() {
+    if true {
         Ok(HttpResponse::Ok().json(persons))
     } else {
         Err(error::ErrorInternalServerError("bad"))
@@ -41,7 +41,7 @@ pub fn delete(id: Path<u32>) -> Result<HttpResponse, Error> {
 #[post("/persons")]
 pub fn create(person: Json<Person>) -> Result<HttpResponse, Error> {
     // Communication with persistence layer
-    if all_correct() {
+    if true {
         Ok(HttpResponse::from(HttpResponse::Created()))
     } else {
         let err_msg = format!("Person with name {} already exists.", person.name());
@@ -58,8 +58,4 @@ pub fn update(id: Path<u32>, person: Json<Person>) -> Result<HttpResponse, Error
         let err_msg = format!("person with id {} not found", id);
         Err(error::ErrorNotFound(err_msg))
     }
-}
-
-fn all_correct() -> bool {
-    true
 }

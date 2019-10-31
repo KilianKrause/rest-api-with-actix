@@ -12,7 +12,15 @@ impl Person {
         Person { id, name, age }
     }
 
+    pub fn id(&self) -> u32 {
+        self.id
+    }
+
     pub fn name(&self) -> &String {
         &self.name
+    }
+
+    pub fn age(&self) -> u32 {
+        self.age
     }
 }
