@@ -2,6 +2,7 @@ use actix_web::{HttpServer, App};
 
 pub mod person;
 pub mod request_handler;
+pub mod person_repository;
 
 fn main() {
     HttpServer::new(|| {

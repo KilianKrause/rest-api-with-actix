@@ -3,13 +3,12 @@ use actix_web::web::{Json, Path};
 use actix_web::{get, delete, post, put};
 
 use crate::person::Person;
+use crate::person_repository;
 
 #[get("/persons")]
 pub fn get_all() -> Result<HttpResponse, Error> {
-    let micheal = Person::new(1, "Micheal".to_owned(), 32);
-    let frank = Person::new(2, "Frank".to_owned(), 28);
-    let persons = vec![micheal, frank];
-    if true {
+    let persons = person_repository::get_all();
+    if !persons.is_empty() {
         Ok(HttpResponse::Ok().json(persons))
     } else {
         Err(error::ErrorInternalServerError("bad"))
