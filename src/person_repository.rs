@@ -5,16 +5,10 @@ use crate::person::Person;
 
 const FILE_NAME: &str = "data.json";
 
-pub fn get(id: u32) -> Result<Person, String> {
+pub fn get(id: u32) -> Option<Person> {
     let persons = read_values_from_file();
-    for person in &persons {
-        if person.id() == id {
-            let found = Person::new(person.id(), person.name().to_owned(), person.age());
-            return Ok(found);
-        }
-    }
-    let err_msg = format!("Person with id {} does not exist.", id);
-    Err(err_msg)
+
+    persons.into_iter().find(|p| p.id() == id)
 }
 
 pub fn get_all() -> Vec<Person> {
@@ -34,11 +28,12 @@ pub fn create(person: Person) -> Result<String, String> {
     Ok("successfully created.".to_owned())
 }
 
+// TODO: implement
 pub fn update(person: Person) -> Result<String, String> {
     let persons = read_values_from_file();
-    for persisted_person in &persons {
+    for (i, persisted_person) in persons.iter().enumerate() {
         if person.id() == persisted_person.id() {
-            // TODO: update person here
+            //persons.insert(i, persisted_person);
             return Err("not yet implemented".to_owned());
             //write_values_to_file(persons);
             //return Ok("Updated successfully".to_owned());

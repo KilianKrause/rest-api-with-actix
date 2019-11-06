@@ -23,4 +23,12 @@ impl Person {
     pub fn age(&self) -> u32 {
         self.age
     }
+
+    pub fn set_name(&mut self, name: String) {
+        self.name = name;
+    }
+
+    pub fn set_age(&mut self, age: u32) {
+        self.age = age;
+    }
 }

@@ -19,8 +19,11 @@ pub fn get_all() -> Result<HttpResponse, Error> {
 pub fn get(id: Path<u32>) -> Result<HttpResponse, Error> {
     let person = person_repository::get(*id);
     match person {
-        Ok(found) => Ok(HttpResponse::Ok().json(found)),
-        Err(e) => Err(error::ErrorNotFound(e)),
+        Some(found) => Ok(HttpResponse::Ok().json(found)),
+        None => {
+            let err_msg = format!("Person with id {} not found", id);
+            Err(error::ErrorNotFound(err_msg))
+        }
     }
 }
 
