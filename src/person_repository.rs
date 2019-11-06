@@ -10,6 +10,7 @@ pub fn get(id: u32) -> Result<Person, String> {
     for person in &persons {
         if person.id() == id {
             // TODO: return person here
+            return Err("not yet implemented".to_owned());
         }
     }
     let err_msg = format!("Person with id {} does not exist.", id);
@@ -38,8 +39,9 @@ pub fn update(person: Person) -> Result<String, String> {
     for persisted_person in &persons {
         if person.id() == persisted_person.id() {
             // TODO: update person here
-            write_values_to_file(persons);
-            return Ok("Updated successfully".to_owned()); // without return statement
+            return Err("not yet implemented".to_owned());
+            //write_values_to_file(persons);
+            //return Ok("Updated successfully".to_owned()); // without return statement
         }
     }
     let err_msg = format!("Person with id {} does not exist.", person.id());
@@ -47,10 +49,10 @@ pub fn update(person: Person) -> Result<String, String> {
 }
 
 pub fn delete(id: u32) -> Result<String, String> {
-    let persons = read_values_from_file();
-    for person in &persons {
+    let mut persons = read_values_from_file();
+    for (i, person) in persons.iter().enumerate() {
         if person.id() == id {
-            // TODO: delete person here
+            persons.remove(i);
             write_values_to_file(persons);
             return Ok("success".to_owned()); // without return statement
         }
