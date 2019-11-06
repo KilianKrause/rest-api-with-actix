@@ -21,7 +21,7 @@ pub fn get(id: Path<u32>) -> Result<HttpResponse, Error> {
     match person {
         Some(found) => Ok(HttpResponse::Ok().json(found)),
         None => {
-            let err_msg = format!("Person with id {} not found", id);
+            let err_msg = format!("Person with id {} does not exist.", id);
             Err(error::ErrorNotFound(err_msg))
         }
     }
@@ -45,7 +45,6 @@ pub fn create(person: Json<Person>) -> Result<HttpResponse, Error> {
 
 #[put("/persons/{id}")]
 pub fn update(id: Path<u32>, person: Json<Person>) -> Result<HttpResponse, Error> {
-    println!("{}", id);
     match person_repository::update(person.into_inner()) {
         Ok(msg) => Ok(HttpResponse::from(msg)),
         Err(err_msg) => Err(error::ErrorNotFound(err_msg))

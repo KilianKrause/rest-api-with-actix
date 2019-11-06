@@ -28,15 +28,15 @@ pub fn create(person: Person) -> Result<String, String> {
     Ok("successfully created.".to_owned())
 }
 
-// TODO: implement
 pub fn update(person: Person) -> Result<String, String> {
-    let persons = read_values_from_file();
+    let mut persons = read_values_from_file();
     for (i, persisted_person) in persons.iter().enumerate() {
         if person.id() == persisted_person.id() {
-            //persons.insert(i, persisted_person);
-            return Err("not yet implemented".to_owned());
-            //write_values_to_file(persons);
-            //return Ok("Updated successfully".to_owned());
+            let updated_person = Person::new(person.id(), person.name().to_owned(), person.age());
+            persons.remove(i);
+            persons.insert(i, updated_person);
+            write_values_to_file(persons);
+            return Ok("Updated successfully".to_owned());
         }
     }
     let err_msg = format!("Person with id {} does not exist.", person.id());
@@ -45,6 +45,9 @@ pub fn update(person: Person) -> Result<String, String> {
 
 pub fn delete(id: u32) -> Result<String, String> {
     let mut persons = read_values_from_file();
+
+    //let foo: Vec<Person> = persons.into_iter().filter(|p| p.id() != id).collect();
+    //write_values_to_file(foo);
     for (i, person) in persons.iter().enumerate() {
         if person.id() == id {
             persons.remove(i);
