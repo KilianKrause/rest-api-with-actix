@@ -9,8 +9,8 @@ pub fn get(id: u32) -> Result<Person, String> {
     let persons = read_values_from_file();
     for person in &persons {
         if person.id() == id {
-            // TODO: return person here
-            return Err("not yet implemented".to_owned());
+            let found = Person::new(person.id(), person.name().to_owned(), person.age());
+            return Ok(found);
         }
     }
     let err_msg = format!("Person with id {} does not exist.", id);
@@ -41,7 +41,7 @@ pub fn update(person: Person) -> Result<String, String> {
             // TODO: update person here
             return Err("not yet implemented".to_owned());
             //write_values_to_file(persons);
-            //return Ok("Updated successfully".to_owned()); // without return statement
+            //return Ok("Updated successfully".to_owned());
         }
     }
     let err_msg = format!("Person with id {} does not exist.", person.id());
@@ -54,7 +54,7 @@ pub fn delete(id: u32) -> Result<String, String> {
         if person.id() == id {
             persons.remove(i);
             write_values_to_file(persons);
-            return Ok("success".to_owned()); // without return statement
+            return Ok("success".to_owned());
         }
     }
     let err_msg = format!("Person with id {} does not exist.", id);
