@@ -1,9 +1,11 @@
-use actix_web::{Error, error, HttpResponse};
+use actix_web::{HttpResponse};
 use actix_web::web::{Json, Path};
 use actix_web::{get, delete, post, put};
+use serde_json::json;
 
 use crate::person::{NewPerson, UpdatePerson};
 use crate::person_repository;
+use crate::error::Error;
 
 #[get("/persons")]
 pub fn get_all() -> Result<HttpResponse, Error> {
@@ -11,7 +13,8 @@ pub fn get_all() -> Result<HttpResponse, Error> {
     if !persons.is_empty() {
         Ok(HttpResponse::Ok().json(persons))
     } else {
-        Err(error::ErrorNotFound("No persons persisted yet.".to_owned()))
+        let json_err = json!({"error" : "No persons persisted yet."});
+        Err(Error::NotFound(json_err))
     }
 }
 
@@ -22,7 +25,8 @@ pub fn get(id: Path<u32>) -> Result<HttpResponse, Error> {
         Some(found) => Ok(HttpResponse::Ok().json(found)),
         None => {
             let err_msg = format!("Person with id {} does not exist.", id);
-            Err(error::ErrorNotFound(err_msg))
+            let json_err = json!({"error" : err_msg});
+            Err(Error::NotFound(json_err))
         }
     }
 }
@@ -30,8 +34,8 @@ pub fn get(id: Path<u32>) -> Result<HttpResponse, Error> {
 #[delete("/persons/{id}")]
 pub fn delete(id: Path<u32>) -> Result<HttpResponse, Error> {
     match person_repository::delete(*id) {
-        Ok(msg) => Ok(HttpResponse::from(msg)),
-        Err(err_msg) => Err(error::ErrorNotFound(err_msg))
+        Ok(_) => Ok(HttpResponse::from(HttpResponse::Ok())),
+        Err(err_msg) => Err(Error::NotFound(json!({"error" : err_msg})))
     }
 }
 
@@ -39,14 +43,14 @@ pub fn delete(id: Path<u32>) -> Result<HttpResponse, Error> {
 pub fn create(person: Json<NewPerson>) -> Result<HttpResponse, Error> {
     match person_repository::create(person.into_inner()) {
         Ok(_) => Ok(HttpResponse::from(HttpResponse::Created())),
-        Err(err_msg) => Err(error::ErrorConflict(err_msg))
+        Err(err_msg) => Err(Error::Conflict(json!({"error" : err_msg})))
     }
 }
 
 #[put("/persons/{id}")]
 pub fn update(id: Path<u32>, person: Json<UpdatePerson>) -> Result<HttpResponse, Error> {
     match person_repository::update(*id, person.into_inner()) {
-        Ok(msg) => Ok(HttpResponse::from(msg)),
-        Err(err_msg) => Err(error::ErrorNotFound(err_msg))
+        Ok(_) => Ok(HttpResponse::from(HttpResponse::Ok())),
+        Err(err_msg) => Err(Error::NotFound(json!({"error" : err_msg})))
     }
 }
