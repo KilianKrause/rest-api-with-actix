@@ -18,11 +18,3 @@ fn main() {
     .run()
     .unwrap();
 }
-
-
-
-// Beispiel Request handler
-/*#[get("/")]
-fn request_handler() -> impl Responder {
-    "Hello world!".to_owned()
-}*/

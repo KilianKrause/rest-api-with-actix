@@ -32,3 +32,16 @@ impl Person {
         self.age = age;
     }
 }
+
+
+#[derive(Serialize, Deserialize)]
+pub struct NewPerson {
+    pub name: String,
+    pub age: u32
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct UpdatePerson {
+    pub name: Option<String>,
+    pub age: Option<u32>
+}
