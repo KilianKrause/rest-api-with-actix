@@ -1,7 +1,7 @@
-use std::fs;
 use serde_json;
+use std::fs;
 
-use crate::person::{Person, NewPerson, UpdatePerson};
+use crate::person::{NewPerson, Person, UpdatePerson};
 
 const FILE_NAME: &str = "data.json";
 
@@ -34,7 +34,7 @@ pub fn update(id: u32, person: UpdatePerson) -> Result<String, String> {
             return Ok("Updated successfully".to_owned());
         }
     }
-    
+
     let err_msg = format!("Person with id {} does not exist.", id);
     Err(err_msg)
 }

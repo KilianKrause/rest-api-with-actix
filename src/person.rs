@@ -1,10 +1,10 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Person {
     id: u32,
     name: String,
-    age: u32
+    age: u32,
 }
 
 impl Person {
@@ -33,15 +33,14 @@ impl Person {
     }
 }
 
-
 #[derive(Serialize, Deserialize)]
 pub struct NewPerson {
     pub name: String,
-    pub age: u32
+    pub age: u32,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct UpdatePerson {
     pub name: Option<String>,
-    pub age: Option<u32>
+    pub age: Option<u32>,
 }
