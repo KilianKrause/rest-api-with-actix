@@ -15,42 +15,42 @@ pub fn get_all() -> Vec<Person> {
     read_values_from_file()
 }
 
-pub fn create(new_person: NewPerson) -> Result<String, String> {
+pub fn create(new_person: NewPerson) -> Result<(), String> {
     let mut persons = read_values_from_file();
     let id = calculate_new_id(&persons);
     persons.push(Person::new(id, new_person.name, new_person.age));
     write_values_to_file(persons);
-    Ok("successfully created.".to_owned())
+    Ok(())
 }
 
-pub fn update(id: u32, person: UpdatePerson) -> Result<String, String> {
+pub fn update(id: u32, person: UpdatePerson) -> Result<(), String> {
     let mut persons = read_values_from_file();
-    for (i, persisted_person) in persons.iter().enumerate() {
-        if id == persisted_person.id() {
-            let updated_person = Person::new(id, person.name.unwrap(), person.age.unwrap());
-            persons.remove(i);
-            persons.insert(i, updated_person);
-            write_values_to_file(persons);
-            return Ok("Updated successfully".to_owned());
-        }
-    }
 
-    let err_msg = format!("Person with id {} does not exist.", id);
-    Err(err_msg)
+    if let Some(index) = persons.iter().position(|x| x.id() == id) {
+        persons.remove(index);
+        persons.insert(
+            index,
+            Person::new(id, person.name.unwrap(), person.age.unwrap()),
+        );
+        write_values_to_file(persons);
+        Ok(())
+    } else {
+        let err_msg = format!("Person with id {} does not exist.", id);
+        Err(err_msg)
+    }
 }
 
-pub fn delete(id: u32) -> Result<String, String> {
+pub fn delete(id: u32) -> Result<(), String> {
     let mut persons = read_values_from_file();
 
-    for (i, person) in persons.iter().enumerate() {
-        if person.id() == id {
-            persons.remove(i);
-            write_values_to_file(persons);
-            return Ok("success".to_owned());
-        }
+    if let Some(index) = persons.iter().position(|x| x.id() == id) {
+        persons.remove(index);
+        write_values_to_file(persons);
+        Ok(())
+    } else {
+        let err_msg = format!("Person with id {} does not exist.", id);
+        Err(err_msg)
     }
-    let err_msg = format!("Person with id {} does not exist.", id);
-    Err(err_msg)
 }
 
 fn calculate_new_id(persons: &[Person]) -> u32 {

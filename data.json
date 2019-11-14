@@ -1,8 +1,8 @@
 [
     {
         "id": 2,
-        "name": "Kilian",
-        "age": 22
+        "name": "Bob",
+        "age": 30
     },
     {
         "id": 3,
@@ -11,7 +11,7 @@
     },
     {
         "id": 4,
-        "name": "Peter",
-        "age": 42
+        "name": "Kilian",
+        "age": 22
     }
 ]
