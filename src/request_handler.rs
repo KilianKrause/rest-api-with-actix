@@ -3,9 +3,10 @@ use actix_web::HttpResponse;
 use actix_web::{delete, get, post, put};
 use serde_json::json;
 
-use crate::error::Error;
 use crate::person::{NewPerson, UpdatePerson};
 use crate::person_repository;
+use actix_web::error;
+use actix_web::error::Error;
 
 #[get("/persons")]
 pub fn get_all() -> Result<HttpResponse, Error> {
@@ -14,7 +15,7 @@ pub fn get_all() -> Result<HttpResponse, Error> {
         Ok(HttpResponse::Ok().json(persons))
     } else {
         let json_err = json!({"error" : "No persons persisted yet."});
-        Err(Error::NotFound(json_err))
+        Err(error::ErrorNotFound(json_err))
     }
 }
 
@@ -26,7 +27,7 @@ pub fn get(id: Path<u32>) -> Result<HttpResponse, Error> {
         None => {
             let err_msg = format!("Person with id {} does not exist.", id);
             let json_err = json!({ "error": err_msg });
-            Err(Error::NotFound(json_err))
+            Err(error::ErrorNotFound(json_err))
         }
     }
 }
@@ -35,7 +36,7 @@ pub fn get(id: Path<u32>) -> Result<HttpResponse, Error> {
 pub fn delete(id: Path<u32>) -> Result<HttpResponse, Error> {
     match person_repository::delete(*id) {
         Ok(_) => Ok(HttpResponse::from(HttpResponse::Ok())),
-        Err(err_msg) => Err(Error::NotFound(json!({ "error": err_msg }))),
+        Err(err_msg) => Err(error::ErrorNotFound(json!({ "error": err_msg }))),
     }
 }
 
@@ -43,7 +44,7 @@ pub fn delete(id: Path<u32>) -> Result<HttpResponse, Error> {
 pub fn create(person: Json<NewPerson>) -> Result<HttpResponse, Error> {
     match person_repository::create(person.into_inner()) {
         Ok(_) => Ok(HttpResponse::from(HttpResponse::Created())),
-        Err(err_msg) => Err(Error::Conflict(json!({ "error": err_msg }))),
+        Err(err_msg) => Err(error::ErrorConflict(json!({ "error": err_msg }))),
     }
 }
 
@@ -51,6 +52,6 @@ pub fn create(person: Json<NewPerson>) -> Result<HttpResponse, Error> {
 pub fn update(id: Path<u32>, person: Json<UpdatePerson>) -> Result<HttpResponse, Error> {
     match person_repository::update(*id, person.into_inner()) {
         Ok(_) => Ok(HttpResponse::from(HttpResponse::Ok())),
-        Err(err_msg) => Err(Error::NotFound(json!({ "error": err_msg }))),
+        Err(err_msg) => Err(error::ErrorNotFound(json!({ "error": err_msg }))),
     }
 }

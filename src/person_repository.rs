@@ -26,31 +26,31 @@ pub fn create(new_person: NewPerson) -> Result<(), String> {
 pub fn update(id: u32, person: UpdatePerson) -> Result<(), String> {
     let mut persons = read_values_from_file();
 
-    if let Some(index) = persons.iter().position(|x| x.id() == id) {
-        persons.remove(index);
+    if let Some(index) = persons.iter().position(|person| person.id() == id) {
+        let old = persons.remove(index);
         persons.insert(
             index,
-            Person::new(id, person.name.unwrap(), person.age.unwrap()),
+            Person::new(
+                id,
+                person.name.unwrap_or_else(|| old.name().clone()),
+                person.age.unwrap_or_else(|| old.age()),
+            ),
         );
         write_values_to_file(persons);
-        Ok(())
-    } else {
-        let err_msg = format!("Person with id {} does not exist.", id);
-        Err(err_msg)
+        return Ok(());
     }
+    Err(format!("Person with id {} does not exist.", id))
 }
 
 pub fn delete(id: u32) -> Result<(), String> {
     let mut persons = read_values_from_file();
 
-    if let Some(index) = persons.iter().position(|x| x.id() == id) {
+    if let Some(index) = persons.iter().position(|person| person.id() == id) {
         persons.remove(index);
         write_values_to_file(persons);
-        Ok(())
-    } else {
-        let err_msg = format!("Person with id {} does not exist.", id);
-        Err(err_msg)
+        return Ok(());
     }
+    Err(format!("Person with id {} does not exist.", id))
 }
 
 fn calculate_new_id(persons: &[Person]) -> u32 {

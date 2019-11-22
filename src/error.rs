@@ -1,3 +1,4 @@
+/*
 use actix_web::{error, HttpResponse};
 use failure::Fail;
 use serde_json::Value; // json representation of error message
@@ -18,3 +19,4 @@ impl error::ResponseError for Error {
         }
     }
 }
+*/
