@@ -21,9 +21,8 @@ pub fn get_all() -> Result<HttpResponse, Error> {
 
 #[get("/persons/{id}")]
 pub fn get(id: Path<u32>) -> Result<HttpResponse, Error> {
-    let person = person_repository::get(*id);
-    match person {
-        Some(found) => Ok(HttpResponse::Ok().json(found)),
+    match person_repository::get(*id) {
+        Some(person) => Ok(HttpResponse::Ok().json(person)),
         None => {
             let err_msg = format!("Person with id {} does not exist.", id);
             let json_err = json!({ "error": err_msg });
@@ -44,7 +43,7 @@ pub fn delete(id: Path<u32>) -> Result<HttpResponse, Error> {
 pub fn create(person: Json<NewPerson>) -> Result<HttpResponse, Error> {
     match person_repository::create(person.into_inner()) {
         Ok(_) => Ok(HttpResponse::from(HttpResponse::Created())),
-        Err(err_msg) => Err(error::ErrorConflict(json!({ "error": err_msg }))),
+        Err(err_msg) => Err(error::ErrorBadRequest(json!({ "error": err_msg }))),
     }
 }
 
