@@ -1,17 +1,12 @@
 [
     {
-        "id": 3,
-        "name": "Daniel",
-        "age": 19
+        "id": 1,
+        "name": "Alice",
+        "age": 42
     },
     {
-        "id": 4,
-        "name": "Kilian",
-        "age": 22
-    },
-    {
-        "id": 5,
-        "name": "Maxim",
-        "age": 22
+        "id": 2,
+        "name": "Bob",
+        "age": 24
     }
 ]
