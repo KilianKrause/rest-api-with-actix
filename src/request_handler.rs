@@ -21,7 +21,7 @@ pub fn get_all() -> Result<HttpResponse, Error> {
 
 #[get("/persons/{id}")]
 pub fn get(id: Path<u32>) -> Result<HttpResponse, Error> {
-    match person_repository::get(*id) {
+    match person_repository::get_person_by_id(*id) {
         Some(person) => Ok(HttpResponse::Ok().json(person)),
         None => {
             let err_msg = format!("Person with id {} does not exist.", id);

@@ -5,7 +5,7 @@ use crate::person::{NewPerson, Person, UpdatePerson};
 
 const FILE_NAME: &str = "data.json";
 
-pub fn get(id: u32) -> Option<Person> {
+pub fn get_person_by_id(id: u32) -> Option<Person> {
     let persons = read_values_from_file();
 
     persons.into_iter().find(|p| p.id() == id)
